@@ -1,0 +1,19 @@
+[package]
+name = "island-hop"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "灵动岛形态的局域网键鼠 / 剪贴板共享（macOS + Windows）"
+
+[[bin]]
+name = "IslandHop"
+path = "src/main.rs"
+
+[dependencies]
+eframe = { version = "0.31", default-features = false, features = ["glow", "default_fonts"] }
+openhop-core = { path = "../crates/core" }
+anyhow = "1"
+dirs = "7"
+chrono = "0.4"
+log = "0.4"
+env_logger = "0.11"

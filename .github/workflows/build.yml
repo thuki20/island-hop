@@ -1,0 +1,62 @@
+name: Build IslandHop
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  TAG: v0.1.0
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Recreate release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh release view "$TAG" >/dev/null 2>&1 && gh release delete "$TAG" --yes --cleanup-tag || true
+          gh release create "$TAG" --title "IslandHop $TAG" --notes "Windows x64 + macOS arm64, built from $GITHUB_SHA"
+
+  windows:
+    needs: release
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Build
+        run: cargo build --release -p island-hop
+      - name: Package
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force dist | Out-Null
+          Copy-Item target\release\IslandHop.exe dist\
+          Compress-Archive -Path dist\IslandHop.exe -DestinationPath IslandHop-Windows-x64.zip -Force
+      - name: Upload
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v0.1.0
+          files: IslandHop-Windows-x64.zip
+
+  macos:
+    needs: release
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Build
+        run: cargo build --release -p island-hop
+      - name: Bundle .app and dmg
+        run: bash packaging/macos-app.sh
+      - name: Upload
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v0.1.0
+          files: dist/IslandHop-macOS-arm64.dmg

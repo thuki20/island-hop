@@ -1,0 +1,61 @@
+[package]
+name = "openhop-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+anyhow = "1.0.104"
+arboard = { version = "3.6.1", features = ["image-data"] }
+bincode = "1"
+blake2 = "0.11.0"
+crossbeam-channel = "0.5.17"
+dirs = "7.0.0"
+getrandom = "0.3"
+image = { version = "0.25", default-features = false, features = ["png", "jpeg", "gif", "webp", "bmp", "tiff"] }
+jpeg-encoder = { version = "0.7", features = ["simd"] }
+log = "0.4.34"
+netdev = "0.46.3"
+opener = { version = "0.9.0", features = ["reveal"] }
+parking_lot = "0.12.5"
+png = "0.18.1"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1"
+qrcode = { version = "0.14", default-features = false, features = ["svg"] }
+str0m = { version = "0.24", default-features = false, features = ["rust-crypto"] }
+tungstenite = { version = "0.30", features = ["rustls-tls-webpki-roots"] }
+k256 = { version = "0.14", features = ["schnorr"] }
+aes-gcm = "0.11"
+hkdf = "0.13"
+sha2 = "0.11"
+sysinfo = { version = "0.37", default-features = false, features = ["system"] }
+snow = { version = "0.10.0", default-features = false, features = ["default-resolver", "use-chacha20poly1305", "use-blake2", "use-curve25519", "use-getrandom"] }
+socket2 = { version = "0.6.5", features = ["all"] }
+thiserror = "2.0.21"
+toml = "1.1.6"
+
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"
+
+[target.'cfg(target_os = "linux")'.dependencies]
+evdev = "0.13.2"
+memmap2 = "0.9"
+x11rb = { version = "0.14.0", features = ["xtest", "xfixes", "xkb", "composite", "xinput", "shm", "randr"] }
+zbus = "5"
+
+[target.'cfg(any(windows, target_os = "macos"))'.dependencies]
+cpal = "0.18"
+
+[target."cfg(windows)".dependencies]
+windows-core = "0.62"
+windows = { version = "0.62.2", features = ["Win32_Foundation", "Win32_UI_WindowsAndMessaging", "Win32_UI_Input_KeyboardAndMouse", "Win32_System_LibraryLoader", "Win32_System_Threading", "Win32_UI_HiDpi", "Win32_Graphics_Gdi", "Win32_System_DataExchange", "Win32_System_Ole", "Win32_System_Com", "Win32_System_Com_StructuredStorage", "Win32_System_SystemServices", "Win32_UI_Shell", "Win32_UI_Shell_Common", "Win32_System_Memory", "Win32_System_SystemInformation", "Win32_Storage_Xps", "Win32_Graphics_Dwm", "Win32_System_Registry", "Win32_System_Power", "Win32_Storage_FileSystem", "Win32_System_StationsAndDesktops", "Win32_System_Shutdown", "Media_Control", "Foundation", "Storage_Streams"]  }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+core-foundation = "0.10.1"
+core-graphics = { version = "0.25.0", features = ["highsierra"] }
+objc2-app-kit = { version = "0.3", default-features = false, features = ["std", "NSPasteboard", "NSPasteboardItem", "NSRunningApplication", "NSApplication", "NSWorkspace", "NSImage", "NSScreen", "NSGraphics", "libc", "objc2-core-foundation"] }
+objc2 = "0.6"
+objc2-foundation = { version = "0.3", default-features = false, features = ["std", "NSString", "NSArray", "NSData", "NSURL", "NSGeometry"] }
+
+[dev-dependencies]
+env_logger = "0.11.11"
