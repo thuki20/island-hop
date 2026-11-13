@@ -44,7 +44,12 @@ jobs:
           tag_name: v0.1.0
           files: IslandHop-Windows-x64.zip
 
+  # 本账号的 macOS runner 在 push 时会被 GitHub 立刻取消（两次实测
+  # 2026-11-12 / 2026-11-13 均为 0 step、1 秒、runner 为空），导致整次 run
+  # 显示 cancelled，容易被误判成出包失败。因此 macOS 包固定由本机
+  # packaging/macos-app.sh 构建后手动上传；此 job 仅在手动触发时可选运行。
   macos:
+    if: github.event_name == 'workflow_dispatch'
     needs: release
     runs-on: macos-14
     steps:

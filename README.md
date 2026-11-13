@@ -7,8 +7,9 @@
 - **没有 WebView2 / Electron / Tauri**：UI 用 egui 自绘，单个原生二进制。
 - 双端：`macOS (arm64)` 与 `Windows (x64)`。
 
-> **当前状态（2026-11-13）：本轮按你的要求「现在不出包」——只改了本地工程，没有重新生成 dmg/zip、没有上传 Release、没有 push GitHub。**
-> 已发布的 `v0.1.0` 仍是旧包（无刘海适配、无图标、无下列功能页）。要生效需要下次出包并安装。
+> **当前状态（2026-11-13 已出包）**：commit `de946c6` 已推送，Release `v0.1.0` 的两个资产都已替换成本轮新构建。
+> macOS dmg 由本机 `packaging/macos-app.sh` 生成并上传；Windows zip 由 GitHub Actions 构建并上传（exe 已确认带 `.rsrc` 图标资源）。
+> 旧包（无刘海适配、无图标、无功能页）已被覆盖，**需要重新下载安装才生效**。
 
 ---
 
@@ -49,7 +50,7 @@ bash packaging/macos-app.sh --app-only   # 只生成本地 .app，不产 dmg
 bash packaging/macos-app.sh              # .app + dist/*.dmg（出包时用）
 ```
 
-**本轮没有执行任何打包命令**，`IslandHop.app` / `dist/` 里仍是旧产物（被 `.gitignore` 忽略）。
+**本轮已执行打包**：`IslandHop.app`（带 `AppIcon.icns`、无 `LSUIElement`、Dock 图标可见）与 `dist/IslandHop-macOS-arm64.dmg` 已生成，`hdiutil verify` VALID；Windows zip 由 CI 产出，`unzip -t` 通过。
 
 ## 3. 功能页（按 C 方案：尽量复刻岛仔主力功能）
 
@@ -94,6 +95,14 @@ cargo build --release -p island-hop
 - macOS：Xcode Command Line Tools；Windows：Rust stable + MSVC 生成工具（图标资源需要 Windows SDK 的 `rc.exe`，找不到只 warning 不中断）。
 - 不需要 Node.js / WebView2 / NSIS / 任何前端工具链。
 - CI（`.github/workflows/build.yml`）已改为**不再删除重建 Release**（旧版每次 push 都会清空 `v0.1.0` 资产）；只在 Release 不存在时创建。
+- CI 的 `macos` job 在本账号下 push 时会被 GitHub 立刻取消（两次实测：0 step、1 秒、runner 为空），会把整次 run 标记成 `cancelled`。现已改为**仅 `workflow_dispatch` 手动触发**；push 只跑 `release` + `windows`，macOS 包固定由本机构建后上传。
+
+本轮发布资产（Release `v0.1.0`，均为 2026-11-13 新构建）：
+
+| 资产 | 大小 | 来源 | 校验 |
+|---|---|---|---|
+| `IslandHop-macOS-arm64.dmg` | 4,425,600 B | 本机 `macos-app.sh` | `hdiutil verify` VALID；内含 `AppIcon.icns`、arm64 Mach-O |
+| `IslandHop-Windows-x64.zip` | 3,816,427 B | GitHub Actions `windows` job | `unzip -t` OK；`IslandHop.exe` 8,830,976 B，含 `.rsrc` 23,040 B（6 个尺寸图标 + 版本信息） |
 
 ## 7. 已知限制（如实说明）
 
