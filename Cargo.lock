@@ -763,6 +763,7 @@ dependencies = [
  "iana-time-zone",
  "js-sys",
  "num-traits",
+ "serde",
  "wasm-bindgen",
  "windows-link 0.2.1",
 ]
@@ -2331,12 +2332,18 @@ name = "island-hop"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "arboard",
  "chrono",
  "dirs",
  "eframe",
  "env_logger",
  "log",
+ "objc2 0.6.5",
+ "opener",
  "openhop-core",
+ "raw-window-handle",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]

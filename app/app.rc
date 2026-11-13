@@ -1,0 +1,30 @@
+#pragma code_page(65001)
+1 ICON "assets/AppIcon.ico"
+1 VERSIONINFO
+ FILEVERSION 0,1,0,0
+ PRODUCTVERSION 0,1,0,0
+ FILEFLAGSMASK 0x3fL
+ FILEFLAGS 0x0L
+ FILEOS 0x40004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "080404b0"
+    BEGIN
+      VALUE "FileDescription", "IslandHop 灵动岛"
+      VALUE "InternalName", "IslandHop"
+      VALUE "OriginalFilename", "IslandHop.exe"
+      VALUE "ProductName", "IslandHop"
+      VALUE "ProductVersion", "0.1.0"
+      VALUE "FileVersion", "0.1.0"
+      VALUE "CompanyName", "IslandHop"
+      VALUE "LegalCopyright", "MIT License"
+    END
+  END
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x0804, 1200
+  END
+END

@@ -1,7 +1,11 @@
 /target
 /dist
+/verify
 *.app
 *.dmg
 *.zip
+*.exe
 .DS_Store
 *.log
+__pycache__/
+*.pyc
